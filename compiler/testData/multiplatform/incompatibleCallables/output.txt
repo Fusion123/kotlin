@@ -112,7 +112,7 @@ impl inline fun f20(noinline s: () -> Unit) {}
 ^
 compiler/testData/multiplatform/incompatibleCallables/jvm.kt:33:1: error: 'impl' function 'f21' has no corresponding 'header' declaration
 The following declaration is incompatible because parameter types are different:
-    public header fun f21(c: suspend Unit.() -> Unit): Unit
+    public header fun f21(c: (suspend Unit.() -> Unit)): Unit
 
 impl fun f21(c: Unit.() -> Unit) {}
 ^

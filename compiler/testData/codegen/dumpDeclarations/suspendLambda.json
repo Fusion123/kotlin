@@ -17,7 +17,7 @@
 		"class": "SuspendLambdaKt",
 		"members": [
 			{"visibility": "public",	"declaration": "fun invokeCoroutineBuilder(): kotlin.Unit", "name": "invokeCoroutineBuilder", "desc": "()V"},
-			{"visibility": "public",	"declaration": "fun buildCoroutine(builderAction: suspend kotlin.Any.() -> kotlin.Unit): kotlin.Unit", "name": "buildCoroutine", "desc": "(Lkotlin/jvm/functions/Function2;)V"}
+			{"visibility": "public",	"declaration": "fun buildCoroutine(builderAction: (suspend kotlin.Any.() -> kotlin.Unit)): kotlin.Unit", "name": "buildCoroutine", "desc": "(Lkotlin/jvm/functions/Function2;)V"}
 		]
 	}
 ]
