@@ -150,6 +150,19 @@ val coreLibProjects = listOf(
         ":kotlin-reflect"
 )
 
+val gradlePluginProjects = listOf(
+        ":kotlin-gradle-plugin",
+        ":kotlin-gradle-plugin:plugin-marker",
+        ":kotlin-gradle-plugin-api",
+//        ":kotlin-gradle-plugin-integration-tests",  // TODO: build fails
+        ":kotlin-allopen",
+        ":kotlin-allopen:plugin-marker",
+        ":kotlin-annotation-processing-gradle",
+        ":kotlin-noarg",
+        ":kotlin-noarg:plugin-marker",
+        ":kotlin-sam-with-receiver"
+)
+
 allprojects {
     group = "org.jetbrains.kotlin"
     version = buildNumber
@@ -249,7 +262,7 @@ val compilerCopyTask = task<Copy>("idea-plugin-copy-compiler") {
     from(distDir) { include("kotlinc/**") }
 }
 
-task<Copy>("distPlugin") {
+task<Copy>("ideaPlugin") {
     dependsOn(compilerCopyTask)
     dependsOnTaskIfExistsRec("idea-plugin")
     shouldRunAfter(":prepare:kotlin-plugin:idea-plugin")
@@ -258,7 +271,7 @@ task<Copy>("distPlugin") {
 
 task("dist-plugin") {
     // deprecated
-    dependsOn("distPlugin")
+    dependsOn("ideaPlugin")
 }
 
 tasks {
@@ -276,6 +289,12 @@ tasks {
                 ":kotlin-test:kotlin-test-js:kotlin-test-js-it",
                 ":tools:binary-compatibility-validator"
         )).forEach {
+            dependsOn(it + ":check")
+        }
+    }
+
+    "gradlePluginsTest" {
+        gradlePluginProjects.forEach {
             dependsOn(it + ":check")
         }
     }
@@ -345,6 +364,13 @@ tasks {
                   ":examples:kotlin-jsr223-daemon-local-eval-example:test")
     }
 
+    "examplesTest" {
+        dependsOn("dist")
+        (project(":examples").subprojects + project(":kotlin-gradle-subplugin-example")).forEach { p ->
+            dependsOn("${p.path}:check")
+        }
+    }
+
     "other-tests" {
         dependsOn("dist")
         dependsOn(":kotlin-build-common:test",
@@ -360,6 +386,17 @@ tasks {
                 ":generators:test"
         )
     }
+
+    "distTest" {
+        dependsOn("compilerTest")
+        dependsOn("gradlePluginsTest")
+        dependsOn("examplesTest")
+    }
+
+    "ideaPluginTest" {
+        dependsOn("nonCompilerTest")
+    }
+
 
     "test" {
         doLast {

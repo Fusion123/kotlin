@@ -142,7 +142,7 @@ val jar = runtimeJar(task<ShadowJar>("shadowJar")) {
 val ideaPluginDir: File by rootProject.extra
 val ideaUltimatePluginDir: File by rootProject.extra
 
-task<Copy>("distUltimatePlugin") {
+task<Copy>("ideaUltimatePlugin") {
     dependsOnTaskIfExistsRec("idea-plugin", rootProject)
     into(ideaUltimatePluginDir)
     from(ideaPluginDir) { exclude("lib/kotlin-plugin.jar") }
@@ -150,7 +150,11 @@ task<Copy>("distUltimatePlugin") {
 }
 
 task("idea-ultimate-plugin") {
-    dependsOn("distUltimatePlugin")
+    dependsOn("ideaUltimatePlugin")
+}
+
+task("ideaUltimatePluginTest") {
+    dependsOn("check")
 }
 
 projectTest {
